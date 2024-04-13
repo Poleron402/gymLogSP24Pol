@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-    private static final String TAG = "POLEJIA";
+    public static final String TAG = "POLEJIA";
     String mExercise = "";
     double mWeight = 0.0;
     int mReps = 0;
