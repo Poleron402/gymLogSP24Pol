@@ -1,9 +1,8 @@
-package com.example.gymlogsp.Database;
-import androidx.annotation.NonNull;
+package com.example.gymlogsp.Database.entities;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.gymlogsp.Database.entities.GymLogDB;
+import com.example.gymlogsp.Database.GymLogDB;
 
 import java.time.LocalDate;
 import java.util.Objects;
