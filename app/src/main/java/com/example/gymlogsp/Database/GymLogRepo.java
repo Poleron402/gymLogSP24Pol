@@ -40,6 +40,6 @@ public class GymLogRepo {
     public void insertGymLog(GymLog gymLog){
         GymLogDB.dbWriteExecutor.execute(()->{
           gymLogDAO.insert(gymLog);
-        })
+        });
     }
 }
