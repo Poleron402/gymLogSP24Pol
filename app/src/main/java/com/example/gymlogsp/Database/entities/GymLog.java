@@ -4,7 +4,7 @@ import androidx.room.PrimaryKey;
 
 import com.example.gymlogsp.Database.GymLogDB;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity(tableName = GymLogDB.gymLogTable)
@@ -14,7 +14,7 @@ public class GymLog {
     private String exercise;
     private double weight;
     private int reps;
-    private LocalDate date;
+    private LocalDateTime date;
 
     public int getId() {
         return id;
@@ -48,11 +48,11 @@ public class GymLog {
         this.reps = reps;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

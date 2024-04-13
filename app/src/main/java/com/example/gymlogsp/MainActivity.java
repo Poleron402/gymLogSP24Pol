@@ -7,6 +7,8 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 
+import com.example.gymlogsp.Database.GymLogRepo;
+import com.example.gymlogsp.Database.entities.GymLog;
 import com.example.gymlogsp.databinding.ActivityMainBinding;
 
 import java.util.Locale;
@@ -17,12 +19,13 @@ public class MainActivity extends AppCompatActivity {
     String mExercise = "";
     double mWeight = 0.0;
     int mReps = 0;
+    private GymLogRepo repo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        repo = new GymLogRepo(getApplication());
         //making the thang scrollable
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
 
@@ -32,9 +35,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //no toast
                 getInformationFromDisplay();
+                insertGymLogRecord();
                 upDateDisplay();
             }
         });
+    }
+    private void insertGymLogRecord(){
+        GymLog log = new GymLog(mExercise, mWeight, mReps);
+        repo.insertGymLog(log);
     }
     private void upDateDisplay(){
         String currentInfo = binding.logDisplayTextView.getText().toString();

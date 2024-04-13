@@ -18,7 +18,7 @@ public class GymLogRepo {
     public GymLogRepo(Application application){
         GymLogDB db = GymLogDB.getDatabase(application);
         this.gymLogDAO = db.gymLogDAO();
-        this.allLogs = this.gymLogDAO.getAllRecords();
+        this.allLogs = (ArrayList<GymLog>) this.gymLogDAO.getAllRecords();
     }
 
     public ArrayList<GymLog> getAllLogs() {
@@ -26,7 +26,7 @@ public class GymLogRepo {
                 new Callable<ArrayList<GymLog>>() {
                     @Override
                     public ArrayList<GymLog> call() throws Exception {
-                        return gymLogDAO.getAllRecords();
+                        return (ArrayList<GymLog>) gymLogDAO.getAllRecords();
                     }
                 }
         );
