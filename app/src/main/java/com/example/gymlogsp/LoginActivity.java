@@ -3,6 +3,7 @@ import com.example.gymlogsp.Database.entities.User;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.example.gymlogsp.Database.GymLogRepo;
 import com.example.gymlogsp.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
-    //silly comment
+    //silly lil comment
     private ActivityLoginBinding binding;
     private GymLogRepo repo;
     @Override
@@ -45,6 +46,10 @@ public class LoginActivity extends AppCompatActivity {
             if(user != null){
                 String password = binding.passwordLoginTextView.getText().toString();
                 if(password.equals(user.getPassword())){
+                    SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(MainActivity.SHARED_PREFERENCES_USERID, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+                    sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCES_USERID, user.getId());
+                    sharedPrefEditor.apply();
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 }else{
                     toastMaker("Invalid pw");

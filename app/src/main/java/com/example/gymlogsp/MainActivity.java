@@ -45,11 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         loginUser();
-        invalidateOptionsMenu();
         if(loggedInUser == -1){
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
+        invalidateOptionsMenu();
+
         repo = GymLogRepo.getRepository(getApplication());
         //making the thang scrollable
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
@@ -90,6 +91,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
     private void logout(){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_USERID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCES_USERID, LOGGEDOUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGEDOUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
     @Override
