@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }else{
                 toastMaker(String.format("No user %s found. Not a valid username", username));
+                binding.userNameLoginTextView.setSelection(0);
             }
         });
 

@@ -3,6 +3,7 @@ package com.example.gymlogsp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
-        invalidateOptionsMenu();
 
         repo = GymLogRepo.getRepository(getApplication());
         //making the thang scrollable
@@ -81,7 +81,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         loggedInUser = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGEDOUT);
+        if(loggedInUser == LOGGEDOUT){
+            return;
+        }
+        LiveData<User> userObserver = repo.getUserById(loggedInUser);
+        userObserver.observe(this, user -> {
+            if (user != null) {
+                return;
 
+            } else {
+                invalidateOptionsMenu();
+            }
+        }
     }
 
     @Override
@@ -104,7 +115,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Drew");
+        if(user == null){
+            return false;
+        }
+        item.setTitle(user.getUsername());
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
