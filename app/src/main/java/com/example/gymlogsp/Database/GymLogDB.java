@@ -9,14 +9,16 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.gymlogsp.Database.entities.GymLog;
+import com.example.gymlogsp.Database.entities.User;
 import com.example.gymlogsp.Database.typeConverters.LocalDateTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {GymLog.class}, version = 1, exportSchema = false)
+@Database(entities = {GymLog.class, User.class}, version = 3, exportSchema = false)
 public abstract class GymLogDB extends RoomDatabase {
     public static final String gymLogTable = "gymLogTable";
+    public static final String userTable = "userTable";
     //this is new from prev class
     private static volatile GymLogDB INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
@@ -39,7 +41,17 @@ public abstract class GymLogDB extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db){
             super.onCreate(db);
             //TODO: add stuff
+            dbWriteExecutor.execute(()->{
+                UserDAO dao = INSTANCE.userDAO();
+                User admin = new User("admin1", "admin1");
+                admin.setAdmin(true);
+                User testUser = new User("testuser1", "testuser1");
+                dao.insert(admin, testUser);
+
+            });
         }
     };
     public abstract GymLogDAO gymLogDAO();
+    public abstract UserDAO userDAO();
+
 }
