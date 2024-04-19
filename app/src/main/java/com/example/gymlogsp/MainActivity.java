@@ -87,12 +87,9 @@ public class MainActivity extends AppCompatActivity {
         LiveData<User> userObserver = repo.getUserById(loggedInUser);
         userObserver.observe(this, user -> {
             if (user != null) {
-                return;
-
-            } else {
                 invalidateOptionsMenu();
             }
-        }
+        });
     }
 
     @Override
