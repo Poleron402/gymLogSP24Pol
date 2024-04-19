@@ -21,4 +21,7 @@ public interface UserDAO {
     void deleteAll();
     @Query("select * from "+GymLogDB.userTable+ " WHERE username == :username")
     LiveData<User> getUserByUserName(String username);
+
+    @Query("select * from "+GymLogDB.userTable+ " WHERE id == :userId")
+    LiveData<User> getUserById(int userId);
 }

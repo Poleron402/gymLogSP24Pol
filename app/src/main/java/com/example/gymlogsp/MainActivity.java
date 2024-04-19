@@ -3,6 +3,7 @@ package com.example.gymlogsp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         loginUser();
-        invalidateOptionsMenu();
         if(loggedInUser == -1){
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
+
         repo = GymLogRepo.getRepository(getApplication());
         //making the thang scrollable
         binding.logDisplayTextView.setMovementMethod(new ScrollingMovementMethod());
@@ -80,7 +81,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         loggedInUser = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGEDOUT);
-
+        if(loggedInUser == LOGGEDOUT){
+            return;
+        }
+        LiveData<User> userObserver = repo.getUserById(loggedInUser);
+        userObserver.observe(this, user -> {
+            if (user != null) {
+                invalidateOptionsMenu();
+            }
+        });
     }
 
     @Override
@@ -90,13 +99,23 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
     private void logout(){
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_USERID, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCES_USERID, LOGGEDOUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGEDOUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Drew");
+        if(user == null){
+            return false;
+        }
+        item.setTitle(user.getUsername());
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem menuItem) {
